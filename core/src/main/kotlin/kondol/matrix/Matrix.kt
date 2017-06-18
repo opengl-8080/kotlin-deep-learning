@@ -30,6 +30,8 @@ class Matrix(private vararg val rows: DoubleArray) {
         this.colSize = this.rows[0].size
     }
     
+    fun sum() = this.rows.sumByDouble(DoubleArray::sum)
+    
     fun exp() = this.map { Math.exp(it) }
 
     operator fun unaryMinus() = this.map { -it }

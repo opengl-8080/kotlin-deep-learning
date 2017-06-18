@@ -10,6 +10,21 @@ import org.junit.Test
 class MatrixTest {
 
     @Test
+    fun test_sum() {
+        // setup
+        val matrix = Matrix(
+            doubleArrayOf(1.0, 2.0),
+            doubleArrayOf(3.0, 4.0)
+        )
+        
+        // exercise
+        val actual = matrix.sum()
+        
+        // verify
+        Assertions.assertThat(actual).isEqualTo(1.0 + 2.0 + 3.0 + 4.0)
+    }
+
+    @Test
     fun test_toString() {
         // setup
         val matrix = Matrix(
