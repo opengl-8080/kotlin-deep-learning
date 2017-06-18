@@ -1,7 +1,6 @@
-package kondol
+package kondol.matrix
 
 import java.util.*
-
 
 class Matrix(private vararg val rows: DoubleArray) {
     
@@ -30,6 +29,8 @@ class Matrix(private vararg val rows: DoubleArray) {
         this.rowSize = this.rows.size
         this.colSize = this.rows[0].size
     }
+    
+    fun exp() = this.map { Math.exp(it) }
 
     operator fun unaryMinus() = this.map { -it }
 
@@ -45,8 +46,8 @@ class Matrix(private vararg val rows: DoubleArray) {
     operator fun div(l: Long) = this.map { it / l }
     operator fun div(l: Double) = this.map { it / l }
     
-    operator fun plus(other: Matrix) = this.mapWith(other, {thisValue, otherValue -> thisValue + otherValue})
-    operator fun minus(other: Matrix) = this.mapWith(other, {thisValue, otherValue -> thisValue - otherValue})
+    operator fun plus(other: Matrix) = this.mapWith(other, { thisValue, otherValue -> thisValue + otherValue})
+    operator fun minus(other: Matrix) = this.mapWith(other, { thisValue, otherValue -> thisValue - otherValue})
     operator fun times(other: Matrix): Matrix {
         if (this.colSize != other.rowSize) {
             throw IllegalArgumentException("Expected row size is ${this.colSize}. However actual is ${other.rowSize}.")
@@ -104,26 +105,6 @@ class Matrix(private vararg val rows: DoubleArray) {
             row.joinToString(prefix = "[", separator = ", ", postfix = "]")
         })
 }
-
-operator fun Double.plus(matrix: Matrix) = matrix.map { this + it }
-operator fun Double.minus(matrix: Matrix) = matrix.map { this - it }
-operator fun Double.times(matrix: Matrix) = matrix.map { this * it }
-operator fun Double.div(matrix: Matrix) = matrix.map { this / it }
-
-operator fun Float.plus(matrix: Matrix) = matrix.map { this + it }
-operator fun Float.minus(matrix: Matrix) = matrix.map { this - it }
-operator fun Float.times(matrix: Matrix) = matrix.map { this * it }
-operator fun Float.div(matrix: Matrix) = matrix.map { this / it }
-
-operator fun Long.plus(matrix: Matrix) = matrix.map { this + it }
-operator fun Long.minus(matrix: Matrix) = matrix.map { this - it }
-operator fun Long.times(matrix: Matrix) = matrix.map { this * it }
-operator fun Long.div(matrix: Matrix) = matrix.map { this / it }
-
-operator fun Int.plus(matrix: Matrix) = matrix.map { this + it }
-operator fun Int.minus(matrix: Matrix) = matrix.map { this - it }
-operator fun Int.times(matrix: Matrix) = matrix.map { this * it }
-operator fun Int.div(matrix: Matrix) = matrix.map { this / it }
 
 private fun toDoubleArray(intRows: Array<out IntArray>): Array<DoubleArray> {
     val array = Array(intRows.size, {DoubleArray(intRows[0].size)})

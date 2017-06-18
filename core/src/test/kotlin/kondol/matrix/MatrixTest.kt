@@ -1,8 +1,11 @@
-package kondol
+package kondol.matrix
 
+import kondol.matrix.operators.div
+import kondol.matrix.operators.minus
+import kondol.matrix.operators.plus
+import kondol.matrix.operators.times
 import org.assertj.core.api.Assertions
 import org.junit.Test
-import kotlin.coroutines.experimental.EmptyCoroutineContext.plus
 
 class MatrixTest {
 
@@ -693,5 +696,23 @@ class MatrixTest {
         }
         .isInstanceOf(IllegalArgumentException::class.java)
         .hasMessage("Expected row size is 2. However actual is 1.")
+    }
+
+    @Test
+    fun test_exp() {
+        // setup
+        val matrix = Matrix(
+            intArrayOf(1, 2),
+            intArrayOf(3, 4)
+        )
+        
+        // exercise
+        val actual = matrix.exp()
+        
+        // verify
+        Assertions.assertThat(actual).isEqualTo(Matrix(
+            doubleArrayOf(Math.exp(1.0), Math.exp(2.0)),
+            doubleArrayOf(Math.exp(3.0), Math.exp(4.0))
+        ))
     }
 }
