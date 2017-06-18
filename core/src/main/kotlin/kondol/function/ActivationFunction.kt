@@ -10,5 +10,6 @@ interface ActivationFunction {
         val SIGMOID = SigmoidFunction()
         val STEP = StepFunction()
         val ReLU = ReLUFunction()
+        val IDENTITY = IdentityFunction()
     }
 }
