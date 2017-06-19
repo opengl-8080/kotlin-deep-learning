@@ -30,6 +30,8 @@ class Matrix(private vararg val rows: DoubleArray) {
         this.colSize = this.rows[0].size
     }
     
+    fun max(): Double = this.rows.flatMap{it.toList()}.max()!! // matrix always has any elements.
+    
     fun sum() = this.rows.sumByDouble(DoubleArray::sum)
     
     fun exp() = this.map { Math.exp(it) }
