@@ -1,6 +1,7 @@
 package kondol.matrix
 
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 class Matrix(private vararg val rows: DoubleArray) {
     
@@ -10,6 +11,7 @@ class Matrix(private vararg val rows: DoubleArray) {
 
     val rowSize: Int
     val colSize: Int
+    private val cache = ConcurrentHashMap<String, Any>()
     
     init {
         if (this.rows.isEmpty()) {
@@ -29,14 +31,15 @@ class Matrix(private vararg val rows: DoubleArray) {
         this.rowSize = this.rows.size
         this.colSize = this.rows[0].size
     }
-    
-    fun max(): Double = this.rows.flatMap{it.toList()}.max()!! // matrix always has any elements.
-    
-    fun sum() = this.rows.sumByDouble(DoubleArray::sum)
-    
-    fun exp() = this.map { Math.exp(it) }
 
-    operator fun unaryMinus() = this.map { -it }
+    // matrix always has any elements.
+    fun max(): Double = this.cache.computeIfAbsent("max", {this.rows.flatMap { it.toList() }.max()!!}) as Double
+    
+    fun sum(): Double = this.cache.computeIfAbsent("sum", {this.rows.sumByDouble(DoubleArray::sum)}) as Double
+    
+    fun exp(): Matrix = this.cache.computeIfAbsent("exp", {this.map { Math.exp(it) }}) as Matrix
+
+    operator fun unaryMinus(): Matrix = this.cache.computeIfAbsent("unaryMinus", {this.map { -it }}) as Matrix
 
     operator fun get(rowIndex: Int) = Matrix(this.rows[rowIndex])
     operator fun get(rowIndex: Int, colIndex: Int) = this.rows[rowIndex][colIndex]
@@ -102,12 +105,14 @@ class Matrix(private vararg val rows: DoubleArray) {
         }
     }
 
-    override fun hashCode() = Arrays.deepHashCode(this.rows)
+    override fun hashCode(): Int = this.cache.computeIfAbsent("hashCode", {Arrays.deepHashCode(this.rows)}) as Int
 
     override fun toString()
-        = this.rows.joinToString(separator = "\n", transform = { row ->
-            row.joinToString(prefix = "[", separator = ", ", postfix = "]")
-        })
+        = this.cache.computeIfAbsent("toString", {
+            this.rows.joinToString(separator = "\n", transform = { row ->
+                row.joinToString(prefix = "[", separator = ", ", postfix = "]")
+            })
+        }) as String
 }
 
 private fun toDoubleArray(intRows: Array<out IntArray>): Array<DoubleArray> {
