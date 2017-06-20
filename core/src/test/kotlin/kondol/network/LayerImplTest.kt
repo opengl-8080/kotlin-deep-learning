@@ -5,7 +5,7 @@ import kondol.matrix.Matrix
 import org.assertj.core.api.Assertions
 import org.junit.Test
 
-class LayerTest {
+class LayerImplTest {
 
     @Test
     fun test_forward() {
@@ -22,7 +22,7 @@ class LayerTest {
                 return matrix + 100
             }
         }
-        val layer = Layer(weight = weight, bias = bias, activationFunction = activationFunction)
+        val layer = LayerImpl(weight = weight, bias = bias, activationFunction = activationFunction)
         
         // exercise
         val actual = layer.forward(x)
