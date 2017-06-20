@@ -3,7 +3,7 @@ package kondol.network
 import kondol.function.ActivationFunction
 import kondol.matrix.Matrix
 
-class LayerImpl(
+internal class LayerImpl(
     private val weight: Matrix,
     private val bias: Matrix,
     private val activationFunction: ActivationFunction
