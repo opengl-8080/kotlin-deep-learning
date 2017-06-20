@@ -10,6 +10,24 @@ import org.junit.Test
 class MatrixTest {
 
     @Test
+    fun test_immutable() {
+        // setup
+        val rows = arrayOf(doubleArrayOf(1.0, 2.0, 3.0))
+
+        val matrix = Matrix(*rows)
+        
+        val before = matrix[0, 0]
+        
+        // exercise
+        rows[0][0] = 10.0
+
+        // verify
+        val after = matrix[0, 0]
+        
+        Assertions.assertThat(after).isEqualTo(before)
+    }
+
+    @Test
     fun test_max() {
         // setup
         val matrix = Matrix(

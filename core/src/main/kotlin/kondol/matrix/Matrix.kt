@@ -3,33 +3,37 @@ package kondol.matrix
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-class Matrix(private vararg val rows: DoubleArray) {
+class Matrix(vararg originalRows: DoubleArray) {
     
     constructor(vararg elements: Double): this(elements)
     constructor(vararg intRows: IntArray): this(*toDoubleArray(intRows))
     constructor(vararg elements: Int): this(elements)
 
+    private val rows: Array<out DoubleArray>
     val rowSize: Int
     val colSize: Int
     private val cache = ConcurrentHashMap<String, Any>()
     
     init {
-        if (this.rows.isEmpty()) {
+        if (originalRows.isEmpty()) {
             throw IllegalArgumentException("rows must have any row.")
         }
-        if (this.rows[0].isEmpty()) {
+        if (originalRows[0].isEmpty()) {
             throw IllegalArgumentException("row must have any elements.")
         }
+
+        this.rowSize = originalRows.size
+        this.colSize = originalRows[0].size
         
-        val firstRowSize = this.rows[0].size
-        this.rows.forEachIndexed { i, row ->
-            if (row.size != firstRowSize) {
-                throw IllegalArgumentException("Expected length is $firstRowSize. However row[$i].length is ${row.size}.")
+        val tmpArray = Array(this.rowSize, {DoubleArray(this.colSize)})
+        originalRows.forEachIndexed { i, row ->
+            if (row.size != this.colSize) {
+                throw IllegalArgumentException("Expected length is ${this.colSize}. However row[$i].length is ${row.size}.")
             }
+            tmpArray[i] = Arrays.copyOf(originalRows[i], row.size)
         }
         
-        this.rowSize = this.rows.size
-        this.colSize = this.rows[0].size
+        this.rows = tmpArray
     }
 
     // matrix always has any elements.
