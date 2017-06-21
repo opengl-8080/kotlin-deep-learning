@@ -689,6 +689,25 @@ class MatrixTest {
     }
 
     @Test
+    fun test_operator_overloading_times_matrix() {
+        // setup
+        val a = Matrix(
+                intArrayOf(1, 2),
+                intArrayOf(3, 4)
+        )
+        val b = Matrix(
+                intArrayOf(5, 6),
+                intArrayOf(7, 8)
+        )
+
+        // verify
+        Assertions.assertThat(a * b).isEqualTo(Matrix(
+                intArrayOf(5, 12),
+                intArrayOf(21, 32)
+        ))
+    }
+
+    @Test
     fun test_dot_matrix_1() {
         // setup
         val a = Matrix(

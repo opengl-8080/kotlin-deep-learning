@@ -57,6 +57,10 @@ class Matrix(vararg originalRows: DoubleArray) {
     
     operator fun plus(other: Matrix) = this.mapWith(other, { thisValue, otherValue -> thisValue + otherValue})
     operator fun minus(other: Matrix) = this.mapWith(other, { thisValue, otherValue -> thisValue - otherValue})
+    operator fun times(other: Matrix) = this.mapWith(other, { thisValue, otherValue -> thisValue * otherValue})
+    
+    
+    
     fun dot(other: Matrix): Matrix {
         if (this.colSize != other.rowSize) {
             throw IllegalArgumentException("Expected row size is ${this.colSize}. However actual is ${other.rowSize}.")
