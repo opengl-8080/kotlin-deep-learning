@@ -10,6 +10,22 @@ import org.junit.Test
 class MatrixTest {
 
     @Test
+    fun test_mutable_by_copy_option_false() {
+        // setup
+        val rows = arrayOf(doubleArrayOf(1.0, 2.0, 3.0))
+
+        val matrix = Matrix(false, *rows)
+
+        // exercise
+        rows[0][0] = 10.0
+
+        // verify
+        val after = matrix[0, 0]
+
+        Assertions.assertThat(after).isEqualTo(10.0)
+    }
+
+    @Test
     fun test_immutable() {
         // setup
         val rows = arrayOf(doubleArrayOf(1.0, 2.0, 3.0))
@@ -24,6 +40,24 @@ class MatrixTest {
         // verify
         val after = matrix[0, 0]
         
+        Assertions.assertThat(after).isEqualTo(before)
+    }
+
+    @Test
+    fun test_immutable_int_constructor() {
+        // setup
+        val rows = arrayOf(intArrayOf(1, 2, 3))
+
+        val matrix = Matrix(*rows)
+
+        val before = matrix[0, 0]
+
+        // exercise
+        rows[0][0] = 10
+
+        // verify
+        val after = matrix[0, 0]
+
         Assertions.assertThat(after).isEqualTo(before)
     }
 
@@ -817,6 +851,23 @@ class MatrixTest {
         Assertions.assertThat(actual).isEqualTo(Matrix(
                 doubleArrayOf(Math.log(1.0), Math.log(2.0)),
                 doubleArrayOf(Math.log(3.0), Math.log(4.0))
+        ))
+    }
+
+    @Test
+    fun test_flatten() {
+        // setup
+        val matrix = Matrix(
+            intArrayOf(1, 2),
+            intArrayOf(3, 4)
+        )
+
+        // exercise
+        val actual = matrix.flatten()
+
+        // verify
+        Assertions.assertThat(actual).isEqualTo(Matrix(
+            intArrayOf(1, 2, 3, 4)
         ))
     }
 }

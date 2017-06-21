@@ -2,10 +2,15 @@ package kondol.matrix
 
 import java.util.*
 
-class Matrix(vararg originalRows: DoubleArray) {
+class Matrix internal constructor (copyArray: Boolean = true, vararg originalRows: DoubleArray) {
+    companion object {
+        val COPY = true
+        val NO_COPY = false
+    }
     
+    constructor(vararg rows: DoubleArray): this(COPY, *rows)
     constructor(vararg elements: Double): this(elements)
-    constructor(vararg intRows: IntArray): this(*toDoubleArray(intRows))
+    constructor(vararg intRows: IntArray): this(NO_COPY, *toDoubleArray(intRows))
     constructor(vararg elements: Int): this(elements)
 
     private val rows: Array<out DoubleArray>
@@ -23,15 +28,26 @@ class Matrix(vararg originalRows: DoubleArray) {
         this.rowSize = originalRows.size
         this.colSize = originalRows[0].size
         
-        val tmpArray = Array(this.rowSize, {DoubleArray(this.colSize)})
+        val tmpArray = if (copyArray) {
+            Array(this.rowSize, {DoubleArray(this.colSize)})
+        } else {
+            emptyArray()
+        }
+        
         originalRows.forEachIndexed { i, row ->
             if (row.size != this.colSize) {
                 throw IllegalArgumentException("Expected length is ${this.colSize}. However row[$i].length is ${row.size}.")
             }
-            tmpArray[i] = Arrays.copyOf(originalRows[i], row.size)
+            if (copyArray) {
+                tmpArray[i] = Arrays.copyOf(originalRows[i], row.size)
+            }
         }
-        
-        this.rows = tmpArray
+
+        this.rows = if (copyArray) {
+            tmpArray
+        } else {
+            originalRows
+        }
     }
 
     // matrix always has any elements.
@@ -42,6 +58,19 @@ class Matrix(vararg originalRows: DoubleArray) {
     fun exp(): Matrix = this.map { Math.exp(it) }
     
     fun log(): Matrix = this.map { Math.log(it) }
+    
+    fun flatten(): Matrix {
+        val rows = Array(1, { DoubleArray(this.rowSize * this.colSize) })
+
+        this.rows.forEachIndexed { rowIndex, row ->
+            val baseColIndex = rowIndex * this.rowSize
+            row.forEachIndexed { colIndex, value ->
+                rows[0][baseColIndex + colIndex] = value
+            }
+        }
+
+        return Matrix(NO_COPY, *rows)
+    }
 
     operator fun unaryMinus(): Matrix = this.map { -it }
 
@@ -79,7 +108,7 @@ class Matrix(vararg originalRows: DoubleArray) {
             }
         }
         
-        return Matrix(*rows)
+        return Matrix(NO_COPY, *rows)
     }
     
     internal fun map(mapper: (Double) -> Double)
@@ -101,7 +130,7 @@ class Matrix(vararg originalRows: DoubleArray) {
             }
         }
 
-        return Matrix(*rows)
+        return Matrix(NO_COPY, *rows)
     }
 
     override fun equals(other: Any?): Boolean {
