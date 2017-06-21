@@ -1,7 +1,6 @@
 package kondol.matrix
 
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 
 class Matrix(vararg originalRows: DoubleArray) {
     
@@ -12,7 +11,6 @@ class Matrix(vararg originalRows: DoubleArray) {
     private val rows: Array<out DoubleArray>
     val rowSize: Int
     val colSize: Int
-    private val cache = ConcurrentHashMap<String, Any>()
     
     init {
         if (originalRows.isEmpty()) {
@@ -37,13 +35,13 @@ class Matrix(vararg originalRows: DoubleArray) {
     }
 
     // matrix always has any elements.
-    fun max(): Double = this.cache.computeIfAbsent("max", {this.rows.flatMap { it.toList() }.max()!!}) as Double
+    fun max(): Double = this.rows.flatMap { it.toList() }.max()!!
     
-    fun sum(): Double = this.cache.computeIfAbsent("sum", {this.rows.sumByDouble(DoubleArray::sum)}) as Double
+    fun sum(): Double = this.rows.sumByDouble(DoubleArray::sum)
     
-    fun exp(): Matrix = this.cache.computeIfAbsent("exp", {this.map { Math.exp(it) }}) as Matrix
+    fun exp(): Matrix = this.map { Math.exp(it) }
 
-    operator fun unaryMinus(): Matrix = this.cache.computeIfAbsent("unaryMinus", {this.map { -it }}) as Matrix
+    operator fun unaryMinus(): Matrix = this.map { -it }
 
     operator fun get(rowIndex: Int) = Matrix(this.rows[rowIndex])
     operator fun get(rowIndex: Int, colIndex: Int) = this.rows[rowIndex][colIndex]
@@ -109,14 +107,12 @@ class Matrix(vararg originalRows: DoubleArray) {
         }
     }
 
-    override fun hashCode(): Int = this.cache.computeIfAbsent("hashCode", {Arrays.deepHashCode(this.rows)}) as Int
+    override fun hashCode(): Int = Arrays.deepHashCode(this.rows)
 
     override fun toString()
-        = this.cache.computeIfAbsent("toString", {
-            this.rows.joinToString(separator = "\n", transform = { row ->
-                row.joinToString(prefix = "[", separator = ", ", postfix = "]")
-            })
-        }) as String
+        = this.rows.joinToString(separator = "\n", transform = { row ->
+            row.joinToString(prefix = "[", separator = ", ", postfix = "]")
+        })
 }
 
 private fun toDoubleArray(intRows: Array<out IntArray>): Array<DoubleArray> {
