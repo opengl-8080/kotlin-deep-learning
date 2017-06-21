@@ -40,6 +40,8 @@ class Matrix(vararg originalRows: DoubleArray) {
     fun sum(): Double = this.rows.sumByDouble(DoubleArray::sum)
     
     fun exp(): Matrix = this.map { Math.exp(it) }
+    
+    fun log(): Matrix = this.map { Math.log(it) }
 
     operator fun unaryMinus(): Matrix = this.map { -it }
 

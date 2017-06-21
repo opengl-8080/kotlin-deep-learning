@@ -801,4 +801,22 @@ class MatrixTest {
             doubleArrayOf(Math.exp(3.0), Math.exp(4.0))
         ))
     }
+
+    @Test
+    fun test_log() {
+        // setup
+        val matrix = Matrix(
+                intArrayOf(1, 2),
+                intArrayOf(3, 4)
+        )
+
+        // exercise
+        val actual = matrix.log()
+
+        // verify
+        Assertions.assertThat(actual).isEqualTo(Matrix(
+                doubleArrayOf(Math.log(1.0), Math.log(2.0)),
+                doubleArrayOf(Math.log(3.0), Math.log(4.0))
+        ))
+    }
 }
