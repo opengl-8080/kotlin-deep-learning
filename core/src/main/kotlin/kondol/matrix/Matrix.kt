@@ -58,6 +58,7 @@ class Matrix(vararg originalRows: DoubleArray) {
     operator fun plus(other: Matrix) = this.mapWith(other, { thisValue, otherValue -> thisValue + otherValue})
     operator fun minus(other: Matrix) = this.mapWith(other, { thisValue, otherValue -> thisValue - otherValue})
     operator fun times(other: Matrix) = this.mapWith(other, { thisValue, otherValue -> thisValue * otherValue})
+    operator fun div(other: Matrix) = this.mapWith(other, { thisValue, otherValue -> thisValue / otherValue})
     
     
     
@@ -79,12 +80,12 @@ class Matrix(vararg originalRows: DoubleArray) {
         return Matrix(*rows)
     }
     
-    fun map(mapper: (Double) -> Double)
+    internal fun map(mapper: (Double) -> Double)
             = this.mapIndexed { _, _, value ->
                 mapper(value)
             }
 
-    fun mapWith(other: Matrix, mapper: (Double, Double) -> Double)
+    private fun mapWith(other: Matrix, mapper: (Double, Double) -> Double)
             = this.mapIndexed { rowIndex, colIndex, thisValue -> 
                 mapper(thisValue, other[rowIndex, colIndex])
             }

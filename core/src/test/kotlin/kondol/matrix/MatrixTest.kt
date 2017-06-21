@@ -708,6 +708,25 @@ class MatrixTest {
     }
 
     @Test
+    fun test_operator_overloading_div_matrix() {
+        // setup
+        val a = Matrix(
+                intArrayOf(12, 8),
+                intArrayOf(32, 9)
+        )
+        val b = Matrix(
+                intArrayOf(2, 4),
+                intArrayOf(8, 3)
+        )
+
+        // verify
+        Assertions.assertThat(a / b).isEqualTo(Matrix(
+                intArrayOf(6, 2),
+                intArrayOf(4, 3)
+        ))
+    }
+
+    @Test
     fun test_dot_matrix_1() {
         // setup
         val a = Matrix(
