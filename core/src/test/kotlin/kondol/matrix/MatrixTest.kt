@@ -689,7 +689,7 @@ class MatrixTest {
     }
 
     @Test
-    fun test_operator_overloading_times_matrix_1() {
+    fun test_dot_matrix_1() {
         // setup
         val a = Matrix(
             intArrayOf(1, 2),
@@ -701,14 +701,14 @@ class MatrixTest {
         )
 
         // verify
-        Assertions.assertThat(a * b).isEqualTo(Matrix(
+        Assertions.assertThat(a.dot(b)).isEqualTo(Matrix(
             intArrayOf(1*5 + 2*7),
             intArrayOf(3*5 + 4*7)
         ))
     }
 
     @Test
-    fun test_operator_overloading_times_matrix_2() {
+    fun test_dot_matrix_2() {
         // setup
         val a = Matrix(
                 intArrayOf(1, 2),
@@ -720,14 +720,14 @@ class MatrixTest {
         )
 
         // verify
-        Assertions.assertThat(a * b).isEqualTo(Matrix(
+        Assertions.assertThat(a.dot(b)).isEqualTo(Matrix(
                 intArrayOf(1*5 + 2*7, 1*6 + 2*8, 1*7 + 2*9),
                 intArrayOf(3*5 + 4*7, 3*6 + 4*8, 3*7 + 4*9)
         ))
     }
 
     @Test
-    fun test_times_method_validates_that_this_col_size_equals_to_other_row_size() {
+    fun test_dot_method_validates_that_this_col_size_equals_to_other_row_size() {
         // setup
         val a = Matrix(
                 intArrayOf(1, 2),
@@ -740,7 +740,7 @@ class MatrixTest {
         // verify
         Assertions.assertThatThrownBy {
             // exercise
-            a * b
+            a.dot(b)
         }
         .isInstanceOf(IllegalArgumentException::class.java)
         .hasMessage("Expected row size is 2. However actual is 1.")

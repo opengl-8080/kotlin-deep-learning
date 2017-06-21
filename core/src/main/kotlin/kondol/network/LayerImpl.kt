@@ -9,6 +9,6 @@ internal class LayerImpl(
     private val activationFunction: ActivationFunction
 ): Layer {
     
-    override fun forward(x: Matrix) = this.activationFunction((x * this.weight) + this.bias)
+    override fun forward(x: Matrix) = this.activationFunction((x.dot(this.weight)) + this.bias)
     
 }
