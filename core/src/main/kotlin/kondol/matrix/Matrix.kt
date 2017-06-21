@@ -4,8 +4,8 @@ import java.util.*
 
 class Matrix internal constructor (copyArray: Boolean = true, vararg originalRows: DoubleArray) {
     companion object {
-        val COPY = true
-        val NO_COPY = false
+        private val COPY = true
+        private val NO_COPY = false
     }
     
     constructor(vararg rows: DoubleArray): this(COPY, *rows)
