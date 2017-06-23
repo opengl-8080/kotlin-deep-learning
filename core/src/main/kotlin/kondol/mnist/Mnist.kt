@@ -4,7 +4,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 class Mnist(private val downloadDir: Path) {
-    
+
     companion object {
         private val DEFAULT_DOWNLOAD_DIR = Paths.get("mnist")
         private val TRAINING_IMAGE_FILE = Paths.get("training-image")
@@ -18,5 +18,13 @@ class Mnist(private val downloadDir: Path) {
         }
     }
     
+    fun createTrainingImageReader() = ImageReader(
+        this.downloadDir.resolve(TRAINING_IMAGE_FILE),
+        this.downloadDir.resolve(TRAINING_LABEL_FILE)
+    )
     
+    fun createTestImageReader() = ImageReader(
+        this.downloadDir.resolve(TEST_IMAGE_FILE),
+        this.downloadDir.resolve(TEST_LABEL_FILE)
+    )
 }
