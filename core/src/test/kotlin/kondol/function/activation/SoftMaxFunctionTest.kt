@@ -1,5 +1,6 @@
-package kondol.function
+package kondol.function.activation
 
+import kondol.function.activation.SoftMaxFunction
 import kondol.matrix.Matrix
 import org.assertj.core.api.Assertions
 import org.junit.Test

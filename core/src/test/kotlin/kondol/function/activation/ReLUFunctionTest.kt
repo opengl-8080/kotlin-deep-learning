@@ -1,23 +1,24 @@
-package kondol.function
+package kondol.function.activation
 
+import kondol.function.activation.ReLUFunction
 import kondol.matrix.Matrix
 import org.assertj.core.api.Assertions
 import org.junit.Test
 
-class StepFunctionTest {
+class ReLUFunctionTest {
 
     @Test
-    fun test_step_function() {
+    fun test_ReLU_function() {
         // setup
-        val stepFunction = StepFunction()
+        val reLUFunction = ReLUFunction()
         val matrix = Matrix(-0.1, 0.0, 0.1)
         
         // exercise
-        val actual = stepFunction(matrix)
+        val actual = reLUFunction(matrix)
         
         // verify
         Assertions.assertThat(actual).isEqualTo(Matrix(
-            doubleArrayOf(0.0, 0.0, 1.0)
+            0.0, 0.0, 0.1
         ))
     }
 }

@@ -1,6 +1,6 @@
 package kondol.network
 
-import kondol.function.ActivationFunction
+import kondol.function.activation.ActivationFunction
 import kondol.matrix.Matrix
 import org.assertj.core.api.Assertions
 import org.junit.Test

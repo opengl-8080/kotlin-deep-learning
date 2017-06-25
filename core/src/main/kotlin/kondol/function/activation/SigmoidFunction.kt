@@ -1,4 +1,4 @@
-package kondol.function
+package kondol.function.activation
 
 import kondol.matrix.Matrix
 import kondol.matrix.operators.*
