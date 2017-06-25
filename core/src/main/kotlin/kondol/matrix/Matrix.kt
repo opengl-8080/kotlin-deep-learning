@@ -58,6 +58,10 @@ class Matrix internal constructor (copyArray: Boolean = true, vararg originalRow
     fun exp(): Matrix = this.map { Math.exp(it) }
     
     fun log(): Matrix = this.map { Math.log(it) }
+
+    fun pow(n: Long) = this.pow(n.toDouble())
+    
+    fun pow(n: Double) = this.map { Math.pow(it, n) }
     
     fun flatten(): Matrix {
         val rows = Array(1, { DoubleArray(this.rowSize * this.colSize) })

@@ -10,6 +10,18 @@ import org.junit.Test
 class MatrixTest {
 
     @Test
+    fun test_pow() {
+        // setup
+        val matrix = Matrix(1, 2, 3)
+
+        // exercise
+        val actual = matrix.pow(3)
+
+        // verify
+        Assertions.assertThat(actual).isEqualTo(Matrix(1, 8, 27))
+    }
+
+    @Test
     fun test_mutable_by_copy_option_false() {
         // setup
         val rows = arrayOf(doubleArrayOf(1.0, 2.0, 3.0))
