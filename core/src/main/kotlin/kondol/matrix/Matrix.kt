@@ -49,6 +49,8 @@ class Matrix internal constructor (copyArray: Boolean = true, vararg originalRow
             originalRows
         }
     }
+    
+    val shape = "(${this.rowSize}, ${this.colSize})"
 
     // matrix always has any elements.
     fun max(): Double = this.rows.flatMap { it.toList() }.max()!!
@@ -59,10 +61,22 @@ class Matrix internal constructor (copyArray: Boolean = true, vararg originalRow
     
     fun log(): Matrix = this.map { Math.log(it) }
 
-    fun pow(n: Long) = this.pow(n.toDouble())
+    fun pow(n: Long): Matrix = this.pow(n.toDouble())
     
-    fun pow(n: Double) = this.map { Math.pow(it, n) }
+    fun pow(n: Double): Matrix = this.map { Math.pow(it, n) }
     
+    fun transpose(): Matrix {
+        val rows = Array(this.colSize, {DoubleArray(this.rowSize)})
+        
+        for (rowIndex in 0 until this.colSize) {
+            for (colIndex in 0 until this.rowSize) {
+                rows[rowIndex][colIndex] = this[colIndex, rowIndex]
+            }
+        }
+        
+        return Matrix(NO_COPY, *rows)
+    }
+
     fun flatten(): Matrix {
         val rows = Array(1, { DoubleArray(this.rowSize * this.colSize) })
 
@@ -90,12 +104,42 @@ class Matrix internal constructor (copyArray: Boolean = true, vararg originalRow
     operator fun div(l: Long) = this.map { it / l }
     operator fun div(l: Double) = this.map { it / l }
     
-    operator fun plus(other: Matrix) = this.mapWith(other, { thisValue, otherValue -> thisValue + otherValue})
-    operator fun minus(other: Matrix) = this.mapWith(other, { thisValue, otherValue -> thisValue - otherValue})
-    operator fun times(other: Matrix) = this.mapWith(other, { thisValue, otherValue -> thisValue * otherValue})
-    operator fun div(other: Matrix) = this.mapWith(other, { thisValue, otherValue -> thisValue / otherValue})
+    operator fun plus(other: Matrix): Matrix = this.broadcast(other, { thisValue, otherValue -> thisValue + otherValue})
+    operator fun minus(other: Matrix): Matrix = this.broadcast(other, { thisValue, otherValue -> thisValue - otherValue})
+    operator fun times(other: Matrix): Matrix = this.broadcast(other, { thisValue, otherValue -> thisValue * otherValue})
+    operator fun div(other: Matrix): Matrix = this.broadcast(other, { thisValue, otherValue -> thisValue / otherValue})
     
+    private fun broadcast(other: Matrix, mapper: (Double, Double) -> Double): Matrix {
+        this.validateEnableToBroadcast(other)
+        val a = this.extend(other)
+        val b = other.extend(this)
+        return a.mapWith(b, mapper)
+    }
     
+    private fun validateEnableToBroadcast(other: Matrix) {
+        if (this.rowSize == other.rowSize && this.colSize == other.colSize) {
+            return
+        }
+        
+        val invalidColumnSize = this.rowSize == other.rowSize && 1 < this.colSize && 1 < other.colSize
+        val invalidRowSize = this.colSize == other.colSize && 1 < this.rowSize && 1 < other.rowSize
+        
+        if (invalidColumnSize || invalidRowSize) {
+            throw IllegalArgumentException("Can't broadcast. This shape is ${this.shape} and other shape is ${other.shape}.")
+        }
+    }
+    
+    private fun extend(other: Matrix): Matrix {
+        if (this.rowSize < other.rowSize) {
+            return other.mapIndexed {_, colIndex, _ -> this[0, colIndex] }
+        }
+        
+        if (this.colSize < other.colSize) {
+            return other.mapIndexed { rowIndex, _, _ -> this[rowIndex, 0] }
+        }
+        
+        return this
+    }
     
     fun dot(other: Matrix): Matrix {
         if (this.colSize != other.rowSize) {
@@ -120,7 +164,7 @@ class Matrix internal constructor (copyArray: Boolean = true, vararg originalRow
                 mapper(value)
             }
 
-    private fun mapWith(other: Matrix, mapper: (Double, Double) -> Double)
+    internal fun mapWith(other: Matrix, mapper: (Double, Double) -> Double)
             = this.mapIndexed { rowIndex, colIndex, thisValue -> 
                 mapper(thisValue, other[rowIndex, colIndex])
             }
@@ -139,7 +183,7 @@ class Matrix internal constructor (copyArray: Boolean = true, vararg originalRow
 
     override fun equals(other: Any?): Boolean {
         if (other !is Matrix) return false
-        if (this.rowSize != other.rowSize) return false
+        if (this.rowSize != other.rowSize || this.colSize != other.colSize) return false
         
         var i = 0
         return this.rows.all { row ->

@@ -1,8 +1,10 @@
 package kondol.function.activation
 
-import kondol.function.MatrixFunction
+import kondol.matrix.Matrix
 
-interface ActivationFunction: MatrixFunction {
+interface ActivationFunction {
+    
+    operator fun invoke(matrix: Matrix): Matrix
     
     companion object {
         val SIGMOID = SigmoidFunction()

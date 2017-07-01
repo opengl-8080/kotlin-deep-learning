@@ -1,6 +1,7 @@
 package kondol.network
 
 import kondol.matrix.Matrix
+import kondol.network.layer.Layer
 import org.assertj.core.api.Assertions
 import org.junit.Test
 
@@ -9,11 +10,17 @@ class NeuralNetworkTest {
     @Test
     fun test_neural_network() {
         // setup
-        val layer1 = object :Layer {
+        val layer1 = object : Layer {
             override fun forward(x: Matrix) = x + 10
+            override fun backward(dL: Matrix): Matrix {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
         }
-        val layer2 = object :Layer {
+        val layer2 = object : Layer {
             override fun forward(x: Matrix) = x * 2
+            override fun backward(dL: Matrix): Matrix {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
         }
 
         val neuralNetwork = NeuralNetwork(layer1, layer2)

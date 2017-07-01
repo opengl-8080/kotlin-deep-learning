@@ -10,6 +10,25 @@ import org.junit.Test
 class MatrixTest {
 
     @Test
+    fun test_transpose() {
+        // setup
+        val matrix = Matrix(
+            intArrayOf(1, 2, 3),
+            intArrayOf(4, 5, 6)
+        )
+        
+        // exercise
+        val transposed = matrix.transpose()
+        
+        // verify
+        Assertions.assertThat(transposed).isEqualTo(Matrix(
+            intArrayOf(1, 4),
+            intArrayOf(2, 5),
+            intArrayOf(3, 6)
+        ))
+    }
+
+    @Test
     fun test_pow() {
         // setup
         val matrix = Matrix(1, 2, 3)
@@ -882,4 +901,162 @@ class MatrixTest {
             intArrayOf(1, 2, 3, 4)
         ))
     }
+
+    @Test
+    fun test_operator_overloading_plus_matrix_broadcast_same_column_size() {
+        // setup
+        val x = Matrix(
+            intArrayOf(1, 2, 3),
+            intArrayOf(4, 5, 6)
+        )
+        val y = Matrix(4, 4, 4)
+        
+        // exercise
+        val actual = x + y
+        
+        // verify
+        Assertions.assertThat(actual).isEqualTo(Matrix(
+            intArrayOf(5, 6, 7),
+            intArrayOf(8, 9, 10)
+        ))
+    }
+
+    @Test
+    fun test_operator_overloading_plus_matrix_broadcast_same_column_size_reverse() {
+        // setup
+        val x = Matrix(
+                intArrayOf(1, 2, 3),
+                intArrayOf(4, 5, 6)
+        )
+        val y = Matrix(4, 4, 4)
+
+        // exercise
+        val actual = y + x
+
+        // verify
+        Assertions.assertThat(actual).isEqualTo(Matrix(
+            intArrayOf(5, 6, 7),
+            intArrayOf(8, 9, 10)
+        ))
+    }
+
+    @Test
+    fun test_operator_overloading_plus_matrix_broadcast_same_row_size() {
+        // setup
+        val x = Matrix(
+            intArrayOf(1, 2, 3),
+            intArrayOf(4, 5, 6)
+        )
+        val y = Matrix(
+            intArrayOf(5),
+            intArrayOf(5)
+        )
+
+        // exercise
+        val actual = x + y
+
+        // verify
+        Assertions.assertThat(actual).isEqualTo(Matrix(
+            intArrayOf(6, 7, 8),
+            intArrayOf(9, 10, 11)
+        ))
+    }
+
+    @Test
+    fun test_operator_overloading_plus_matrix_broadcast_same_row_size_reverse() {
+        // setup
+        val x = Matrix(
+            intArrayOf(1, 2, 3),
+            intArrayOf(4, 5, 6)
+        )
+        val y = Matrix(
+            intArrayOf(5),
+            intArrayOf(5)
+        )
+
+        // exercise
+        val actual = y + x
+
+        // verify
+        Assertions.assertThat(actual).isEqualTo(Matrix(
+            intArrayOf(6, 7, 8),
+            intArrayOf(9, 10, 11)
+        ))
+    }
+
+    @Test
+    fun test_operator_overloading_plus_matrix_broadcast_exception_if_rowSize_is_same_but_colSize_is_not_1() {
+        // setup
+        val x = Matrix(
+            intArrayOf(1, 2, 3),
+            intArrayOf(4, 5, 6)
+        )
+        val y = Matrix(
+            intArrayOf(5, 6),
+            intArrayOf(5, 6)
+        )
+
+        // exercise, verify
+        Assertions.assertThatThrownBy { x + y }
+            .isInstanceOf(IllegalArgumentException::class.java)
+            .hasMessage("Can't broadcast. This shape is ${x.shape} and other shape is ${y.shape}.")
+    }
+
+    @Test
+    fun test_operator_overloading_minus_matrix_broadcast_same_column_size() {
+        // setup
+        val x = Matrix(
+            intArrayOf(1, 2, 3),
+            intArrayOf(4, 5, 6)
+        )
+        val y = Matrix(4, 4, 4)
+
+        // exercise
+        val actual = x - y
+
+        // verify
+        Assertions.assertThat(actual).isEqualTo(Matrix(
+            intArrayOf(-3, -2, -1),
+            intArrayOf(0, 1, 2)
+        ))
+    }
+
+    @Test
+    fun test_operator_overloading_times_matrix_broadcast_same_column_size() {
+        // setup
+        val x = Matrix(
+            intArrayOf(1, 2, 3),
+            intArrayOf(4, 5, 6)
+        )
+        val y = Matrix(4, 4, 4)
+
+        // exercise
+        val actual = x * y
+
+        // verify
+        Assertions.assertThat(actual).isEqualTo(Matrix(
+            intArrayOf(4, 8, 12),
+            intArrayOf(16, 20, 24)
+        ))
+    }
+
+    @Test
+    fun test_operator_overloading_div_matrix_broadcast_same_column_size() {
+        // setup
+        val x = Matrix(
+            intArrayOf(1, 2, 3),
+            intArrayOf(4, 5, 6)
+        )
+        val y = Matrix(4, 4, 4)
+
+        // exercise
+        val actual = x / y
+
+        // verify
+        Assertions.assertThat(actual).isEqualTo(Matrix(
+            doubleArrayOf(1.0/4.0, 2.0/4.0, 3.0/4.0),
+            doubleArrayOf(4.0/4.0, 5.0/4.0, 6.0/4.0)
+        ))
+    }
+    
 }

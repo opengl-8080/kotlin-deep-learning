@@ -2,6 +2,7 @@ package kondol.network
 
 import kondol.function.activation.ActivationFunction
 import kondol.matrix.Matrix
+import kondol.network.layer.LayerImpl
 import org.assertj.core.api.Assertions
 import org.junit.Test
 

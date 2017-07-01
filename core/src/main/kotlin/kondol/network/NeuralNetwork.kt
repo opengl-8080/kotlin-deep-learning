@@ -1,6 +1,7 @@
 package kondol.network
 
 import kondol.matrix.Matrix
+import kondol.network.layer.Layer
 
 class NeuralNetwork (
     private vararg val layers: Layer
