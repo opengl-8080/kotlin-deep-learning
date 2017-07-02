@@ -26,7 +26,7 @@ class AffineLayer(
         }
         
         this.dw = this.x!!.transpose().dot(dL)
-        this.db = dL
+        this.db = dL.sumVertical()
         return dL.dot(this.weight.transpose())
     }
 }

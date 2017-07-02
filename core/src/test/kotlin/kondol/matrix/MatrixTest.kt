@@ -1058,5 +1058,20 @@ class MatrixTest {
             doubleArrayOf(4.0/4.0, 5.0/4.0, 6.0/4.0)
         ))
     }
+
+    @Test
+    fun test_sumVertical() {
+        // setup
+        val matrix = Matrix(
+            intArrayOf(1, 2, 3),
+            intArrayOf(4, 5, 6)
+        )
+        
+        // exercise
+        val actual = matrix.sumVertical()
+        
+        // verify
+        Assertions.assertThat(actual).isEqualTo(Matrix(5, 7, 9))
+    }
     
 }

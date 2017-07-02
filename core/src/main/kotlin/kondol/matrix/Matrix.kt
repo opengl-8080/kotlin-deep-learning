@@ -57,6 +57,16 @@ class Matrix internal constructor (copyArray: Boolean = true, vararg originalRow
     
     fun sum(): Double = this.rows.sumByDouble(DoubleArray::sum)
     
+    fun sumVertical(): Matrix {
+        val rows = Array(1, {DoubleArray(this.colSize)})
+        
+        this.foreach { _, colIndex, value ->
+            rows[0][colIndex] = rows[0][colIndex] + value
+        }
+        
+        return Matrix(NO_COPY, *rows)
+    }
+    
     fun exp(): Matrix = this.map { Math.exp(it) }
     
     fun log(): Matrix = this.map { Math.log(it) }
@@ -181,6 +191,14 @@ class Matrix internal constructor (copyArray: Boolean = true, vararg originalRow
         return Matrix(NO_COPY, *rows)
     }
 
+    private fun foreach(iterator: (Int, Int, Double) -> Unit) {
+        this.rows.forEachIndexed { rowIndex, row ->
+            row.forEachIndexed { colIndex, value -> 
+                iterator(rowIndex, colIndex, value)
+            }
+        }
+    }
+    
     override fun equals(other: Any?): Boolean {
         if (other !is Matrix) return false
         if (this.rowSize != other.rowSize || this.colSize != other.colSize) return false
