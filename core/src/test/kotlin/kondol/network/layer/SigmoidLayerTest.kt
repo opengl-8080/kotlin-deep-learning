@@ -61,7 +61,7 @@ class SigmoidLayerTest {
         // exercise, verify
         Assertions.assertThatThrownBy { sigmoid.backward(dL) }
                 .isInstanceOf(IllegalStateException::class.java)
-                .hasMessage("this layer's forward() method is not invoked yet.")
+                .hasMessage("this layer's predict() method is not invoked yet.")
     }
 
     private fun s(d: Double) = 1.0 / (1.0 + Math.exp(-d))

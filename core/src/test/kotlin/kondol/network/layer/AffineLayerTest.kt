@@ -101,6 +101,6 @@ class AffineLayerTest {
         // exercise, verify
         Assertions.assertThatThrownBy { layer.backward(dL) }
                 .isInstanceOf(IllegalStateException::class.java)
-                .hasMessage("this layer's forward() method is not invoked yet.")
+                .hasMessage("this layer's predict() method is not invoked yet.")
     }
 }

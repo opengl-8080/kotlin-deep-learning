@@ -15,7 +15,7 @@ class SigmoidLayer: Layer {
 
     override fun backward(dL: Matrix): Matrix {
         if (this.y == null) {
-            throw IllegalStateException("this layer's forward() method is not invoked yet.")
+            throw IllegalStateException("this layer's predict() method is not invoked yet.")
         }
         
         return this.y!!.mapWith(dL) {yValue, dLValue ->

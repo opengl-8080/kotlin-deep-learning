@@ -51,9 +51,41 @@ class Matrix internal constructor (copyArray: Boolean = true, vararg originalRow
     }
     
     val shape = "(${this.rowSize}, ${this.colSize})"
+    
+    fun countIfIndexes(predicate: (Int, Int, Double) -> Boolean): Long {
+        var n = 0L
+        this.rows.forEachIndexed {rowIndex, row ->
+            row.forEachIndexed { colIndex, value -> 
+                if (predicate(rowIndex, colIndex, value)) {
+                    n++
+                }
+            }
+        }
+        return n
+    }
 
     // matrix always has any elements.
     fun max(): Double = this.rows.flatMap { it.toList() }.max()!!
+    
+    fun maxAtHorizontal(): Matrix {
+        val rows = Array(this.rowSize, {DoubleArray(1)})
+        
+        this.rows.forEachIndexed { rowIndex, row ->
+            var maxIndex = 0
+            var max = Double.MIN_VALUE
+            
+            row.forEachIndexed { index, value ->
+                if (max < value) {
+                    max = value
+                    maxIndex = index
+                }
+            }
+            
+            rows[rowIndex][0] = maxIndex.toDouble()
+        }
+        
+        return Matrix(NO_COPY, *rows)
+    }
     
     fun sum(): Double = this.rows.sumByDouble(DoubleArray::sum)
     

@@ -17,7 +17,7 @@ class SoftMaxWithLossLayer: OutputLayer {
 
     override fun backward(dL: Double): Matrix {
         if (this.y == null || this.t == null) {
-            throw IllegalStateException("this layer's forward() method is not invoked yet.")
+            throw IllegalStateException("this layer's predict() method is not invoked yet.")
         }
         
         val batchSize = this.t!!.rowSize

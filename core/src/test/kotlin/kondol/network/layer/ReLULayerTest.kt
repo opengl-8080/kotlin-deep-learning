@@ -47,6 +47,6 @@ class ReLULayerTest {
         val dL = Matrix(2.0, 3.0, 4.0)
         Assertions.assertThatThrownBy { layer.backward(dL) }
                 .isInstanceOf(IllegalStateException::class.java)
-                .hasMessage("this layer's forward() method is not invoked yet.")
+                .hasMessage("this layer's predict() method is not invoked yet.")
     }
 }

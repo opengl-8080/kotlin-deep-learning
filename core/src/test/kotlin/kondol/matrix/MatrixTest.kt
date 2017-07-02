@@ -1073,5 +1073,51 @@ class MatrixTest {
         // verify
         Assertions.assertThat(actual).isEqualTo(Matrix(5, 7, 9))
     }
-    
+
+    @Test
+    fun test_maxAtHorizontal() {
+        // setup
+        val matrix = Matrix(
+            intArrayOf(1, 2, 3),
+            intArrayOf(2, 3, 1),
+            intArrayOf(3, 2, 3),
+            intArrayOf(1, 2, 3)
+        )
+        
+        // exercise
+        val max = matrix.maxAtHorizontal()
+        
+        // verify
+        Assertions.assertThat(max).isEqualTo(Matrix(
+            intArrayOf(2),
+            intArrayOf(1),
+            intArrayOf(0),
+            intArrayOf(2)
+        ))
+    }
+
+    @Test
+    fun test_countIfIndexes() {
+        // setup
+        val x = Matrix(
+            intArrayOf(1),
+            intArrayOf(0),
+            intArrayOf(4),
+            intArrayOf(3)
+        )
+        val y = Matrix(
+            intArrayOf(1),
+            intArrayOf(0),
+            intArrayOf(2),
+            intArrayOf(3)
+        )
+        
+        // exercise
+        val actual = x.countIfIndexes { rowIndex, colIndex, value -> 
+            value == y[rowIndex, colIndex]
+        }
+        
+        // verify
+        Assertions.assertThat(actual).isEqualTo(3)
+    }
 }

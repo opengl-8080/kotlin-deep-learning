@@ -58,7 +58,7 @@ class SoftMaxWithLossLayerTest {
         // exercise, verify
         Assertions.assertThatThrownBy { layer.backward(1.0) }
                 .isInstanceOf(IllegalStateException::class.java)
-                .hasMessage("this layer's forward() method is not invoked yet.")
+                .hasMessage("this layer's predict() method is not invoked yet.")
     }
 
     private fun softMax(matrix: Matrix): Matrix {
