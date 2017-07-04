@@ -16,6 +16,13 @@ class Image internal constructor (
     private val numberOfRow = ImageFileReader.NUMBER_OF_ROW
     private val numberOfCol = ImageFileReader.NUMBER_OF_COL
     
+    val pixelData: DoubleArray = this.pixels.map(Int::toDouble).toDoubleArray()
+    val teacherData: DoubleArray = label.let { 
+        val data = DoubleArray(10)
+        data[label] = 1.0
+        data
+    }
+    
     fun export(out: Path) {
         val bufferedImage = BufferedImage(this.numberOfRow, this.numberOfCol, BufferedImage.TYPE_BYTE_GRAY)
         val graphics = bufferedImage.createGraphics()

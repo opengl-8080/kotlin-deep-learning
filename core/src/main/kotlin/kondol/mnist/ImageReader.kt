@@ -20,7 +20,7 @@ class ImageReader (
         return Image(label, pixels)
     }
     
-    fun random(n: Int): List<Image> {
+    fun random(n: Int): Images {
         if (n < 0) {
             throw IllegalArgumentException("n must be more than 0. but n = $n.")
         }
@@ -31,7 +31,7 @@ class ImageReader (
             imageList += this.readImage(i)
         }
         
-        return imageList
+        return Images(imageList)
     }
     
     override fun close() {
