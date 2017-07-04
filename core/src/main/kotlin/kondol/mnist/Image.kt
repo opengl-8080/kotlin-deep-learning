@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.nio.file.Path
+import java.util.*
 import javax.imageio.ImageIO
 
 
@@ -32,4 +33,6 @@ class Image internal constructor (
         logger.info("export image to '$out'.")
         ImageIO.write(bufferedImage, "jpeg", out.toFile())
     }
+
+    override fun toString() = "Image(label=$label, pixels=${Arrays.toString(pixels)})"
 }

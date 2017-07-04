@@ -2,6 +2,7 @@ package kondol.mnist
 
 import java.io.Closeable
 import java.io.RandomAccessFile
+import java.nio.ByteBuffer
 import java.nio.file.Path
 
 internal class ImageFileReader (private val file: Path): Closeable {
@@ -13,6 +14,12 @@ internal class ImageFileReader (private val file: Path): Closeable {
     }
     
     private val reader = RandomAccessFile(this.file.toFile(), "r")
+    internal val numberOfImages: Int = this.reader.let {
+        it.seek(4)
+        val buf = ByteArray(4)
+        it.read(buf)
+        ByteBuffer.wrap(buf).int
+    }
     
     fun readPixels(imageIndex: Int): IntArray {
         if (imageIndex < 0) {

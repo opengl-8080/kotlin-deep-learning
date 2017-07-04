@@ -6,8 +6,8 @@ import java.nio.file.Paths
 fun main(args: Array<String>) {
     val mnist = Mnist.download()
     mnist.createTrainingImageReader().use { reader ->
-        val image = reader.readImage(1)
-        image.export(Paths.get("mnist/1.jpeg"))
+        val imageList = reader.random(10)
+        imageList.forEach(::println)
     }
 }
 
